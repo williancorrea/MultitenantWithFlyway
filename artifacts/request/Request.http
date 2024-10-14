@@ -1,0 +1,49 @@
+### Tenant VMWARE
+GET http://localhost:8080/clientsByDatabase
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: TENANT_VMWARE
+
+### Tenant PIVOTAL
+GET http://localhost:8080/clientsByDatabase
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: TENANT_PIVOTAL
+
+### Tenant MARIADB TENANT_CUSTOM
+GET http://localhost:8080/clientsByDatabase
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: TENANT_CUSTOM
+
+
+
+### CREATE CLIENT TENANT VMWARE
+POST http://localhost:8080/clientsByDatabase
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: TENANT_VMWARE
+
+{
+  "name": "VMWARE {{$random.uuid}}"
+}
+
+### CREATE CLIENT TENANT PIVOTAL
+POST http://localhost:8080/clientsByDatabase
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: TENANT_PIVOTAL
+
+{
+  "name": "VMWARE {{$random.uuid}}"
+}
+
+### CREATE CLIENT TENANT MARIADB CUSTOM
+POST http://localhost:8080/clientsByDatabase
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: TENANT_CUSTOM
+
+{
+  "name": "MARIADB {{$random.uuid}}"
+}
