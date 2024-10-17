@@ -1,9 +1,10 @@
 package br.com.devcansado.multitenant.db.config.request;
 
-import br.com.devcansado.multitenant.db.config.TenantIdentifierResolver;
+import br.com.devcansado.multitenant.db.config.properties.PropertiesTenantNames;
+import br.com.devcansado.multitenant.db.config.tenant.TenantIdentifierResolver;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -12,16 +13,31 @@ public class TenantInterceptor implements HandlerInterceptor {
 
   private static final String TENANT_HEADER = "X-Tenant-ID";
 
-  @Autowired
-  TenantIdentifierResolver currentTenant;
+  private final TenantIdentifierResolver currentTenant;
+  private final PropertiesTenantNames propertiesTenantNames;
+
+  public TenantInterceptor(TenantIdentifierResolver currentTenant,
+                           PropertiesTenantNames propertiesTenantNames) {
+    this.currentTenant = currentTenant;
+    this.propertiesTenantNames = propertiesTenantNames;
+  }
 
   @Override
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+  public boolean preHandle(HttpServletRequest request,
+                           @NonNull HttpServletResponse response,
+                           @NonNull Object handler)
+      throws Exception {
     String tenant = request.getHeader(TENANT_HEADER);
 
     if (tenant == null || tenant.isEmpty()) {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      response.getWriter().write("Tenant ID is missing in the request headers");
+      response.getWriter().write("Tenant ID is missing in the request headers (X-Tenant-ID: XXX)");
+      return false;
+    }
+
+    if (!propertiesTenantNames.getTenants().contains(tenant)) {
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      response.getWriter().write("Tenant ID is invalid: " + tenant);
       return false;
     }
 
@@ -30,7 +46,9 @@ public class TenantInterceptor implements HandlerInterceptor {
   }
 
   @Override
-  public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+  public void afterCompletion(@NonNull HttpServletRequest request,
+                              @NonNull HttpServletResponse response,
+                              @NonNull Object handler, Exception ex) {
     currentTenant.setCurrentTenant("unknown"); // Remove context for request
   }
 }

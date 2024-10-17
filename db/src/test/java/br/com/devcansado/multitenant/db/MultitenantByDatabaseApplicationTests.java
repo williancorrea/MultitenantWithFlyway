@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import br.com.devcansado.multitenant.db.client.Client;
 import br.com.devcansado.multitenant.db.client.ClientRepository;
-import br.com.devcansado.multitenant.db.config.TenantIdentifierResolver;
+import br.com.devcansado.multitenant.db.config.tenant.TenantIdentifierResolver;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +18,7 @@ class MultitenantByDatabaseApplicationTests {
 
   public static final String TENANT_PIVOTAL = "TENANT_PIVOTAL";
   public static final String TENANT_VMWARE = "TENANT_VMWARE";
+  
   @Autowired
   ClientRepository clientRepository;
 

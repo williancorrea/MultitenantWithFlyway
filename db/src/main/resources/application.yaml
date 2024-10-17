@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: multitenant-db
+  flyway:
+    enabled: true
+    driver-class-name: org.mariadb.jdbc.Driver
+
+app:
+  database:
+    connection:
+      url: jdbc:mariadb://localhost:3306/{{TENANT}}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      username: root
+      password: tenant
+      driver: org.mariadb.jdbc.Driver
+    tenant-default: TENANT1
+    tenants:
+      - TENANT1
+      - TENANT2
+      - TENANT3

@@ -1,20 +1,24 @@
-package br.com.devcansado.multitenant.db.config;
+package br.com.devcansado.multitenant.db.config.tenant;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 import javax.sql.DataSource;
-import org.hibernate.cfg.AvailableSettings;
+import org.hibernate.cfg.MultiTenancySettings;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NoOpConnectionProvider implements MultiTenantConnectionProvider, HibernatePropertiesCustomizer {
+public class TenantConnectionProvider implements MultiTenantConnectionProvider<String>, HibernatePropertiesCustomizer {
 
-  @Autowired
-  DataSource dataSource;
+  @SuppressWarnings("java:S1948")
+  private final DataSource dataSource;
+
+  public TenantConnectionProvider(DataSource dataSource) {
+    this.dataSource = dataSource;
+  }
 
   @Override
   public Connection getAnyConnection() throws SQLException {
@@ -32,31 +36,28 @@ public class NoOpConnectionProvider implements MultiTenantConnectionProvider, Hi
   }
 
   @Override
-  public boolean isUnwrappableAs(Class<?> aClass) {
+  public boolean isUnwrappableAs(@NonNull Class<?> aClass) {
     return false;
   }
 
   @Override
-  public <T> T unwrap(Class<T> aClass) {
+  public <T> T unwrap(@NonNull Class<T> aClass) {
     throw new UnsupportedOperationException("Can't unwrap this.");
   }
 
   @Override
   public void customize(Map<String, Object> hibernateProperties) {
-    hibernateProperties.put(AvailableSettings.MULTI_TENANT_CONNECTION_PROVIDER, this);
+    hibernateProperties.put(MultiTenancySettings.MULTI_TENANT_CONNECTION_PROVIDER, this);
   }
 
   @Override
-  public Connection getConnection(Object tenantIdentifier) throws SQLException {
+  public Connection getConnection(String tenantIdentifier) throws SQLException {
     return dataSource.getConnection();
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider#releaseConnection(java.lang.Object, java.sql.Connection)
-   */
   @Override
-  public void releaseConnection(Object tenantIdentifier, Connection connection) throws SQLException {
+  public void releaseConnection(String tenantIdentifier, Connection connection) throws SQLException {
     connection.close();
   }
+
 }

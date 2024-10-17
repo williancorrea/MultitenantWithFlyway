@@ -1,49 +1,49 @@
-### Tenant VMWARE
+### TENANT1
 GET http://localhost:8080/clientsByDatabase
 Content-Type: application/json
 Accept: application/json
-X-Tenant-ID: TENANT_VMWARE
+X-Tenant-ID: TENANT1
 
-### Tenant PIVOTAL
+### TENANT2
 GET http://localhost:8080/clientsByDatabase
 Content-Type: application/json
 Accept: application/json
-X-Tenant-ID: TENANT_PIVOTAL
+X-Tenant-ID: TENANT2
 
-### Tenant MARIADB TENANT_CUSTOM
+### TENANT3
 GET http://localhost:8080/clientsByDatabase
 Content-Type: application/json
 Accept: application/json
-X-Tenant-ID: TENANT_CUSTOM
+X-Tenant-ID: TENANT3
 
 
 
-### CREATE CLIENT TENANT VMWARE
+### TENANT1
 POST http://localhost:8080/clientsByDatabase
 Content-Type: application/json
 Accept: application/json
-X-Tenant-ID: TENANT_VMWARE
+X-Tenant-ID: TENANT1
 
 {
-  "name": "VMWARE {{$random.uuid}}"
+  "name": "TENANT1 {{$random.uuid}}"
 }
 
-### CREATE CLIENT TENANT PIVOTAL
+### TENANT2
 POST http://localhost:8080/clientsByDatabase
 Content-Type: application/json
 Accept: application/json
-X-Tenant-ID: TENANT_PIVOTAL
+X-Tenant-ID: TENANT2
 
 {
-  "name": "VMWARE {{$random.uuid}}"
+  "name": "TENANT2 {{$random.uuid}}"
 }
 
-### CREATE CLIENT TENANT MARIADB CUSTOM
+### TENANT3
 POST http://localhost:8080/clientsByDatabase
 Content-Type: application/json
 Accept: application/json
-X-Tenant-ID: TENANT_CUSTOM
+X-Tenant-ID: TENANT3
 
 {
-  "name": "MARIADB {{$random.uuid}}"
+  "name": "TENANT3 {{$random.uuid}}"
 }

@@ -1,11 +1,12 @@
 services:
-  database:
-    image: mariadb:latest
-    container_name: mariadb
+  database_mariadb:
+    image: mariadb:10.7.3
+    container_name: database_mariadb
+    restart: always
     environment:
+      MYSQL_ROOT_PASSWORD: tenant
       MARIADB_ROOT_PASSWORD: tenant
       MYSQL_USER: tenant
       MYSQL_PASSWORD: tenant
-      MYSQL_DATABASE: TENANT_CUSTOM
     ports:
       - "3306:3306"
