@@ -27,6 +27,11 @@ public class TenantInterceptor implements HandlerInterceptor {
                            @NonNull HttpServletResponse response,
                            @NonNull Object handler)
       throws Exception {
+    
+    if("OPTIONS".equalsIgnoreCase(request.getMethod())){
+      return true;
+    }
+    
     String tenant = request.getHeader(TENANT_HEADER);
 
     if (tenant == null || tenant.isEmpty()) {
